@@ -155,5 +155,5 @@ end
 ```
 
 ```elixir
-GLHFChat.free_complete("hf:meta-llama/Meta-Llama-3.1-70B-Instruct", [%{role: "user", content: "Hi, who are you?"}])
+GLHFChat.free_complete([%{role: "user", content: "Hi, who are you?"}])
 ```
