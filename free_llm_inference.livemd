@@ -1,4 +1,4 @@
-# Free LLM inference in Elixir using ex_openai
+# Free LLM inference in Elixir using various providers
 
 ```elixir
 Mix.install([
@@ -8,8 +8,9 @@ Mix.install([
 
 ## Intro
 
-This notebook showcases how to do free LLM inference using the `ex_openai` library.
-SambaNova is the most reliable free provider and has a generous free usage limit.
+This notebook showcases how to do free LLM inference using various providers and the `ex_openai` library.
+
+Currently SambaNova is the most reliable free provider and has a generous free usage limit.
 
 ## SambaNova
 
