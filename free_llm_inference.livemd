@@ -1,0 +1,158 @@
+# Free LLM inference in Elixir using ex_openai
+
+```elixir
+Mix.install([
+  {:ex_openai, "~> 1.7"}
+])
+```
+
+## Intro
+
+This notebook showcases how to do free LLM inference using the `ex_openai` library.
+SambaNova is the most reliable free provider and has a generous free usage limit.
+
+## SambaNova
+
+First Get an API key from https://cloud.sambanova.ai/
+
+Currently all models are free.
+
+```elixir
+defmodule Sambanova do
+  @api_key "YOUR API KEY"
+  @base_url "https://api.sambanova.ai/v1"
+
+  @free_models [
+    "Meta-Llama-3.1-405B-Instruct",
+    "Meta-Llama-3.1-70B-Instruct"
+  ]
+
+  @spec free_complete(list, keyword) :: String.t() | nil
+  def free_complete(messages, opts \\ []) do
+    @free_models
+    |> Enum.find_value(fn model ->
+      case complete(model, messages, opts) do
+        {:ok, %{choices: [%{message: %{content: completion}}]}} -> completion
+        _other -> nil
+      end
+    end)
+  end
+
+  @spec complete(String.t(), list(), keyword) :: {:ok, map} | {:error, any}
+  def complete(model, messages, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:base_url, @base_url)
+      |> Keyword.put_new(:openai_api_key, @api_key)
+      |> Keyword.put_new(:openai_organization_key, "")
+
+    ExOpenAI.Chat.create_chat_completion(messages, model, opts)
+  rescue
+    e -> {:error, e}
+  end
+end
+
+```
+
+```elixir
+Sambanova.free_complete([%{role: "user", content: "Hi, who are you?"}])
+```
+
+## OpenRouter
+
+First get an API key from https://openrouter.ai/
+
+You can use any models tagged with :free.
+
+```elixir
+defmodule Openrouter do
+  @api_key "YOUR API KEY"
+  @base_url "https://openrouter.ai/api/v1"
+
+  @free_models [
+    "google/gemini-pro-1.5-exp",
+    "google/gemini-flash-1.5-exp",
+    "nousresearch/hermes-3-llama-3.1-405b",
+    "microsoft/phi-3-medium-128k-instruct:free"
+  ]
+
+  @spec free_complete(list, keyword) :: String.t() | nil
+  def free_complete(messages, opts \\ []) do
+    @free_models
+    |> Enum.find_value(fn model ->
+      case complete(model, messages, opts) do
+        {:ok, %{choices: [%{message: %{role: "assistant", content: completion}}]}} -> completion
+        _other -> nil
+      end
+    end)
+  end
+
+  @spec complete(String.t(), list(), keyword) :: {:ok, map} | {:error, any}
+  def complete(model, messages, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:base_url, @base_url)
+      |> Keyword.put_new(:openai_api_key, @api_key)
+      |> Keyword.put_new(:openai_organization_key, "")
+
+    ExOpenAI.Chat.create_chat_completion(messages, model, opts)
+  rescue
+    e -> {:error, e}
+  end
+end
+
+```
+
+```elixir
+Openrouter.free_complete([%{role: "user", content: "Hi, who are you?"}])
+```
+
+## GLHF
+
+First get an API key from https://glhf.chat
+
+All models free but not as reliable as others at the moment.
+
+```elixir
+defmodule GLHFChat do
+  @api_key "YOUR API KEY"
+  @base_url "https://glhf.chat/api/openai/v1"
+
+  @models [
+    "hf:meta-llama/Meta-Llama-3.1-70B-Instruct",
+    "hf:VAGOsolutions/Llama-3-SauerkrautLM-70b-Instruct",
+    "hf:google/gemma-2-27b-it",
+    "hf:Qwen/Qwen2-72B-Instruct",
+    "hf:mistralai/Mixtral-8x22B-Instruct-v0.1"
+  ]
+
+  @spec free_complete(list, keyword) :: String.t() | nil
+  def free_complete(messages, opts \\ []) do
+    @models
+    |> Enum.find_value(fn model ->
+      case complete(model, messages, opts) do
+        {:ok, %{choices: [%{message: %{role: "assistant", content: completion}}]}} -> completion
+        _other -> nil
+      end
+    end)
+  end
+
+  @spec complete(String.t(), list(), keyword) :: {:ok, map} | {:error, any}
+  def complete(model, messages, opts \\ []) do
+    opts =
+      opts
+      |> Keyword.put_new(:base_url, @base_url)
+      |> Keyword.put_new(:openai_api_key, @api_key)
+      |> Keyword.put_new(:openai_organization_key, "")
+
+    ExOpenAI.Chat.create_chat_completion(messages, model, opts)
+  rescue
+    e -> {:error, e}
+  end
+end
+
+```
+
+```elixir
+GLHFChat.free_complete("hf:meta-llama/Meta-Llama-3.1-70B-Instruct", [%{role: "user", content: "Hi, who are you?"}])
+```
