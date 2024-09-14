@@ -113,7 +113,7 @@ Openrouter.free_complete([%{role: "user", content: "Hi, who are you?"}])
 
 First get an API key from https://glhf.chat
 
-All models free but not as reliable as others at the moment.
+All models are free but not as reliable as others at the moment.
 
 ```elixir
 defmodule GLHFChat do
