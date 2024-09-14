@@ -63,7 +63,7 @@ Sambanova.free_complete([%{role: "user", content: "Hi, who are you?"}])
 
 First get an API key from https://openrouter.ai/
 
-You can use any models tagged with :free.
+You can use any models tagged with :free or that has $0/M cost.
 
 ```elixir
 defmodule Openrouter do
